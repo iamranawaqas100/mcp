@@ -1,0 +1,12 @@
+# Prefer: docker compose -f ../sr-services/docker-compose.services.yml up leni-mcp-connector
+version: "3.8"
+services:
+  leni-mcp-connector:
+    build: .
+    ports:
+      - "${MCP_CONNECTOR_PORT:-3050}:3050"
+    env_file:
+      - .env
+    environment:
+      - PORT=3050
+      - MCP_PORT=3050
