@@ -1,6 +1,8 @@
-import { Request } from 'express';
+import type { Request as ExpressRequest } from 'express';
+import { URL } from 'url';
 
-type IssuerRequest = Pick<Request, 'protocol' | 'get'>;
+/** Minimal Express request shape (avoids clash with global fetch `Request` on Node 18+). */
+type IssuerRequest = Pick<ExpressRequest, 'protocol' | 'get'>;
 
 const fallbackIssuer = (): string =>
   (process.env.MCP_ISSUER || process.env.APP_URL || process.env.API_GATEWAY || 'http://localhost:3000').replace(
@@ -104,7 +106,7 @@ export const protectedResourceMetadataUrl = (resourceUrl?: string): string => {
 };
 
 /** Full URL for the in-progress authorize request (always on the OAuth issuer / gateway). */
-export const buildConnectorAuthorizeUrl = (req: Request): string => {
+export const buildConnectorAuthorizeUrl = (req: ExpressRequest): string => {
   const base = oauthIssuer(req);
   const path = (req.originalUrl || '/oauth/authorize').split('#')[0];
   const suffix = path.startsWith('/oauth') ? path : '/oauth/authorize';
@@ -121,7 +123,7 @@ export const buildConnectorAuthorizeUrl = (req: Request): string => {
 /**
  * Leni frontend login, then back to gateway/oauth/authorize (not ngrok).
  */
-export const buildLoginRedirectUrl = (req: Request): string => {
+export const buildLoginRedirectUrl = (req: ExpressRequest): string => {
   const appUrl = (process.env.APP_URL || 'https://app.leni.co').replace(/\/$/, '');
   const authorizeUrl = buildConnectorAuthorizeUrl(req);
   return `${appUrl}/login?redirect=${encodeURIComponent(authorizeUrl)}`;

@@ -141,6 +141,6 @@ export const startConnectorListener = (): void => {
 
   // Periodic cleanup of expired auth codes (every 10 min).
   setInterval(() => {
-    cleanupAuthCodes().catch(() => undefined);
+    cleanupAuthCodes().catch((): void => undefined);
   }, 10 * 60 * 1000).unref();
 };

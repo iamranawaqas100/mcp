@@ -88,7 +88,7 @@ const registerTool = (server: any, auth: McpAuth, tool: ToolDef): void => {
           latencyMs: latency,
           rowCount,
           errorMessage,
-        }).catch(() => undefined);
+        }).catch((): void => undefined);
       }
     },
   );
