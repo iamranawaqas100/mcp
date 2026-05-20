@@ -1,8 +1,18 @@
-import type { Request as ExpressRequest } from 'express';
 import { URL } from 'url';
 
-/** Minimal Express request shape (avoids clash with global fetch `Request` on Node 18+). */
-type IssuerRequest = Pick<ExpressRequest, 'protocol' | 'get'>;
+/**
+ * Express-style request fields for issuer/resource URL derivation.
+ * Declared locally so Vercel typecheck still works when @types/express is not installed
+ * (module augmentations would otherwise leave Request as only mcpAuth/leniUser).
+ */
+export interface IssuerRequest {
+  protocol: string;
+  get(name: string): string | undefined;
+}
+
+export interface AuthorizeUrlRequest extends IssuerRequest {
+  originalUrl?: string;
+}
 
 const fallbackIssuer = (): string =>
   (process.env.MCP_ISSUER || process.env.APP_URL || process.env.API_GATEWAY || 'http://localhost:3000').replace(
@@ -106,7 +116,7 @@ export const protectedResourceMetadataUrl = (resourceUrl?: string): string => {
 };
 
 /** Full URL for the in-progress authorize request (always on the OAuth issuer / gateway). */
-export const buildConnectorAuthorizeUrl = (req: ExpressRequest): string => {
+export const buildConnectorAuthorizeUrl = (req: AuthorizeUrlRequest): string => {
   const base = oauthIssuer(req);
   const path = (req.originalUrl || '/oauth/authorize').split('#')[0];
   const suffix = path.startsWith('/oauth') ? path : '/oauth/authorize';
@@ -123,7 +133,7 @@ export const buildConnectorAuthorizeUrl = (req: ExpressRequest): string => {
 /**
  * Leni frontend login, then back to gateway/oauth/authorize (not ngrok).
  */
-export const buildLoginRedirectUrl = (req: ExpressRequest): string => {
+export const buildLoginRedirectUrl = (req: AuthorizeUrlRequest): string => {
   const appUrl = (process.env.APP_URL || 'https://app.leni.co').replace(/\/$/, '');
   const authorizeUrl = buildConnectorAuthorizeUrl(req);
   return `${appUrl}/login?redirect=${encodeURIComponent(authorizeUrl)}`;
