@@ -1,7 +1,6 @@
 // tslint:disable:no-any
-// tslint:disable-next-line:no-var-requires
-const { McpServer } = require('@modelcontextprotocol/sdk/server/mcp.js');
 import { McpAuth } from './bearerAuth';
+import { McpServer } from './mcpSdk';
 import { listPropertiesTool } from './tools/listProperties';
 import { listKpisTool } from './tools/listKpis';
 import { getKpiTool } from './tools/getKpi';

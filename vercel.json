@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run typecheck",
+  "installCommand": "npm install",
+  "functions": {
+    "src/server.ts": {
+      "includeFiles": "node_modules/@modelcontextprotocol/sdk/dist/**"
+    }
+  }
+}

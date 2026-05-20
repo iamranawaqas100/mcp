@@ -1,8 +1,7 @@
 // tslint:disable:no-any
 import { Router, Request, Response } from 'express';
-// tslint:disable-next-line:no-var-requires
-const { StreamableHTTPServerTransport } = require('@modelcontextprotocol/sdk/server/streamableHttp.js');
 import * as crypto from 'crypto';
+import { StreamableHTTPServerTransport } from './mcpSdk';
 import { bearerAuth } from './bearerAuth';
 import { buildMcpServer } from './server';
 import logger from '../utils/logger';
