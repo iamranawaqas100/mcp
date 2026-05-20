@@ -4,7 +4,14 @@
   "installCommand": "npm install",
   "functions": {
     "src/server.ts": {
-      "includeFiles": "node_modules/@modelcontextprotocol/sdk/dist/**"
+      "includeFiles": [
+        "node_modules/@modelcontextprotocol/sdk/dist/**",
+        "node_modules/zod/**",
+        "node_modules/zod-to-json-schema/**",
+        "node_modules/ajv/**",
+        "node_modules/@hono/**",
+        "node_modules/hono/**"
+      ]
     }
   }
 }
